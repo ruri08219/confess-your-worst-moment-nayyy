@@ -3,6 +3,9 @@ import os
 ENTRY = "I spent forty minutes writing a script to automate a five-minute task, then the script deleted the file and I typed it out by hand."
 
 
+MAX_BYTES = 800
+
+
 def validate(text):
     if not isinstance(text, str):
         return False
@@ -13,6 +16,12 @@ def validate(text):
     if "\n" in text or "\r" in text:
         return False
     if any(ord(c) < 32 for c in text):
+        return False
+    try:
+        encoded = text.encode("utf-8")
+    except UnicodeEncodeError:
+        return False
+    if len(encoded) > MAX_BYTES:
         return False
     return True
 
